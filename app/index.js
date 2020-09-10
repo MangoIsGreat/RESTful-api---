@@ -1,9 +1,10 @@
 const Koa = require("koa");
-const bodyparser = require("koa-bodyparser");
+const koaBody = require("koa-body");
 const error = require("koa-json-error")
 const parameter = require("koa-parameter")
 const routing = require("./routes");
 const mongoose = require("mongoose")
+const path = require("path")
 const { connectionStr } = require("./config")
 // 实例化一个app对象：
 const app = new Koa();
@@ -13,7 +14,14 @@ mongoose.connect(connectionStr, { useNewUrlParser: true, useUnifiedTopology: tru
 mongoose.connection.on("error", console.error)
 
 // 将router注册到app中：
-app.use(bodyparser());
+app.use(koaBody({
+  multipart: true,
+  formidable: {
+    uploadDir: path.join(__dirname, '/public/uploads'),
+    keepExtensions: true
+  }
+}));
+
 app.use(error({
     postFormat: (err, {stack, ...rest}) => {
         return process.env.NODE_ENV === "production" ? rest : { stack, ...rest }
