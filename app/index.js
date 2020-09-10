@@ -1,5 +1,6 @@
 const Koa = require("koa");
 const koaBody = require("koa-body");
+const koaStatic = require("koa-static")
 const error = require("koa-json-error")
 const parameter = require("koa-parameter")
 const routing = require("./routes");
@@ -13,7 +14,7 @@ mongoose.connect(connectionStr, { useNewUrlParser: true, useUnifiedTopology: tru
 // 监听数据库连接错误：
 mongoose.connection.on("error", console.error)
 
-// 将router注册到app中：
+app.use(koaStatic(path.join(__dirname, 'public')))
 app.use(koaBody({
   multipart: true,
   formidable: {
