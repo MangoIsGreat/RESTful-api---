@@ -4,6 +4,6 @@ const router = new Router();
 
 router.get("/", index);
 
-router.post("/upload", upload)
+router.post("/upload", upload);
 
 module.exports = router;
