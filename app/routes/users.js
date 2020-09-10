@@ -1,5 +1,5 @@
 const Router = require("koa-router");
-const jwt = require("jsonwebtoken")
+const jwt = require("koa-jwt");
 const {
   find,
   findById,
@@ -7,24 +7,12 @@ const {
   create,
   delete: del,
   login,
-  checkOwner
+  checkOwner,
 } = require("../controllers/users");
 const router = new Router({ prefix: "/users" });
-const { secret } = require("../config")
+const { secret } = require("../config");
 
-const auth = async (ctx, next) => {
-  const { authorization = '' } = ctx.request.header
-  const token = authorization.replace('Bearer ', '')
-  try {
-    const user = jwt.verify(token, secret)
-    // 使用ctx.state来存储用户信息：
-    ctx.state.user = user
-  } catch (err) {
-    ctx.throw(401, err.message)
-  }
-
-  await next()
-}
+const auth = jwt({ secret });
 
 // 查（列表）数据：
 router.get("/", find);
@@ -41,6 +29,6 @@ router.patch("/:id", auth, checkOwner, update);
 router.delete("/:id", auth, checkOwner, del);
 
 // 登录接口：
-router.post("/login", login)
+router.post("/login", login);
 
 module.exports = router;
