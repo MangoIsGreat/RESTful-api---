@@ -10,7 +10,8 @@ const {
   checkOwner,
   listFollowing,
   follow,
-  unfollow
+  unfollow,
+  listFollowers
 } = require("../controllers/users");
 const router = new Router({ prefix: "/users" });
 const { secret } = require("../config");
@@ -36,6 +37,9 @@ router.post("/login", login);
 
 // 获取粉丝列表接口：
 router.get('/:id/following', listFollowing)
+
+// 获取粉丝列表接口：
+router.get('/:id/listFollowers', listFollowers)
 
 // 关注接口：
 router.put('/following/:id', auth, follow)

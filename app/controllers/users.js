@@ -98,21 +98,27 @@ class UsersCtl {
     ctx.status = 204;
   }
   async follow(ctx) {
-    const me = await User.findById(ctx.state.user._id).select('+following')
-    if (!me.following.map(id => id.toString()).includes(ctx.params.id)) {
-      me.following.push(ctx.params.id)
-      me.save()
+    const me = await User.findById(ctx.state.user._id).select("+following");
+    if (!me.following.map((id) => id.toString()).includes(ctx.params.id)) {
+      me.following.push(ctx.params.id);
+      me.save();
     }
-    ctx.status = 204
+    ctx.status = 204;
   }
   async unfollow(ctx) {
-    const me = await User.findById(ctx.state.user._id).select('+following')
-    const index = me.following.map(id => id.toString()).indexOf(ctx.state.user._id)
+    const me = await User.findById(ctx.state.user._id).select("+following");
+    const index = me.following
+      .map((id) => id.toString())
+      .indexOf(ctx.state.user._id);
     if (index > -1) {
-      me.following.splice(index, 1)
-      me.save()
+      me.following.splice(index, 1);
+      me.save();
     }
-    ctx.status = 204
+    ctx.status = 204;
+  }
+  async listFollowers(ctx) {
+    const users = await User.find({ following: ctx.params.id });
+    ctx.body = users;
   }
 }
 
