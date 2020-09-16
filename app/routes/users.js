@@ -11,7 +11,8 @@ const {
   listFollowing,
   follow,
   unfollow,
-  listFollowers
+  listFollowers,
+  checkUserExist
 } = require("../controllers/users");
 const router = new Router({ prefix: "/users" });
 const { secret } = require("../config");
@@ -42,9 +43,9 @@ router.get('/:id/following', listFollowing)
 router.get('/:id/listFollowers', listFollowers)
 
 // 关注接口：
-router.put('/following/:id', auth, follow)
+router.put('/following/:id', auth, checkUserExist, follow)
 
 // 取消关注接口：
-router.delete('/unfollowing/:id', auth, unfollow)
+router.delete('/unfollowing/:id', auth, checkUserExist, unfollow)
 
 module.exports = router;
