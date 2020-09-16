@@ -8,6 +8,8 @@ const {
   delete: del,
   login,
   checkOwner,
+  listFollowing,
+  follow
 } = require("../controllers/users");
 const router = new Router({ prefix: "/users" });
 const { secret } = require("../config");
@@ -30,5 +32,11 @@ router.delete("/:id", auth, checkOwner, del);
 
 // 登录接口：
 router.post("/login", login);
+
+// 获取粉丝列表接口：
+router.get('/:id/following', listFollowing)
+
+// 关注接口：
+router.put('/following/:id', auth, follow)
 
 module.exports = router;
