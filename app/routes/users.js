@@ -9,7 +9,8 @@ const {
   login,
   checkOwner,
   listFollowing,
-  follow
+  follow,
+  unfollow
 } = require("../controllers/users");
 const router = new Router({ prefix: "/users" });
 const { secret } = require("../config");
@@ -38,5 +39,8 @@ router.get('/:id/following', listFollowing)
 
 // 关注接口：
 router.put('/following/:id', auth, follow)
+
+// 取消关注接口：
+router.delete('/unfollowing/:id', auth, unfollow)
 
 module.exports = router;
