@@ -45,6 +45,10 @@ class TopicsCtl {
     );
     ctx.body = topic;
   }
+  async listFollowers(ctx) {
+    const users = await user.find({ followingTopics: ctx.params.id })
+    ctx.body = users
+  }
 }
 
 module.exports = new TopicsCtl();
