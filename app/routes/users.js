@@ -12,7 +12,10 @@ const {
   follow,
   unfollow,
   listFollowers,
-  checkUserExist
+  checkUserExist,
+  followTopics,
+  unfollowTopics,
+  checkTopicExist,
 } = require("../controllers/users");
 const router = new Router({ prefix: "/users" });
 const { secret } = require("../config");
@@ -37,15 +40,21 @@ router.delete("/:id", auth, checkOwner, del);
 router.post("/login", login);
 
 // 获取粉丝列表接口：
-router.get('/:id/following', listFollowing)
+router.get("/:id/following", listFollowing);
 
 // 获取粉丝列表接口：
-router.get('/:id/listFollowers', listFollowers)
+router.get("/:id/listFollowers", listFollowers);
 
 // 关注接口：
-router.put('/following/:id', auth, checkUserExist, follow)
+router.put("/following/:id", auth, checkUserExist, follow);
 
 // 取消关注接口：
-router.delete('/unfollowing/:id', auth, checkUserExist, unfollow)
+router.delete("/unfollowing/:id", auth, checkUserExist, unfollow);
+
+// 关注话题：
+router.put("/followingTopics/:id", auth, checkTopicExist, followTopics);
+
+// 取消关注话题：
+router.delete("/followingTopics/:id", auth, checkTopicExist, unfollowTopics);
 
 module.exports = router;

@@ -107,17 +107,9 @@ class UsersCtl {
       await User.findById(ctx.params.id).select("+following")
     ).populate("following");
     if (!user) {
-      ctx.throw(404);
+      ctx.throw(404, '用户不存在');
     }
     ctx.body = user.following;
-  }
-  async follow(ctx) {
-    const me = await User.findById(ctx.state.user._id).select("+following");
-    if (!me.following.map((id) => id.toString()).includes(ctx.params.id)) {
-      me.following.push(ctx.params.id);
-      me.save();
-    }
-    ctx.status = 204;
   }
   async follow(ctx) {
     const me = await User.findById(ctx.state.user._id).select("+following");
@@ -148,6 +140,34 @@ class UsersCtl {
       ctx.throw(404, "用户不存在");
     }
     await next();
+  }
+  async followTopics(ctx) {
+    const me = await User.findById(ctx.state.user._id).select("+followingTopics");
+    if (!me.following.map((id) => id.toString()).includes(ctx.params.id)) {
+      me.following.push(ctx.params.id);
+      me.save();
+    }
+    ctx.status = 204;
+  }
+  async unfollowTopics(ctx) {
+    const me = await User.findById(ctx.state.user._id).select("+followingTopics");
+    const index = me.following
+      .map((id) => id.toString())
+      .indexOf(ctx.state.user._id);
+    if (index > -1) {
+      me.following.splice(index, 1);
+      me.save();
+    }
+    ctx.status = 204;
+  }
+  async listFollowingTopics(ctx) {
+    const user = await (
+      await User.findById(ctx.params.id).select("+followingTopics")
+    ).populate("followingTopics");
+    if (!user) {
+      ctx.throw(404, '用户不存在');
+    }
+    ctx.body = user.listFollowingTopics;
   }
 }
 
