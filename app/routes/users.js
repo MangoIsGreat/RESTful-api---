@@ -15,7 +15,6 @@ const {
   checkUserExist,
   followTopics,
   unfollowTopics,
-  checkTopicExist,
   listQuestions,
 } = require("../controllers/users");
 const router = new Router({ prefix: "/users" });
@@ -53,10 +52,10 @@ router.put("/following/:id", auth, checkUserExist, follow);
 router.delete("/unfollowing/:id", auth, checkUserExist, unfollow);
 
 // 关注话题：
-router.put("/followingTopics/:id", auth, checkTopicExist, followTopics);
+router.put("/followingTopics/:id", auth, checkUserExist, followTopics);
 
 // 取消关注话题：
-router.delete("/followingTopics/:id", auth, checkTopicExist, unfollowTopics);
+router.delete("/followingTopics/:id", auth, checkUserExist, unfollowTopics);
 
 router.get("/:id/questions", listQuestions);
 

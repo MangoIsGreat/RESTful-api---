@@ -24,6 +24,7 @@
     "nodemon": "^2.0.4"
   },
   "dependencies": {
+    "debug": "^4.2.0",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.13.0",
     "koa-body": "^4.2.0",
@@ -33,6 +34,7 @@
     "koa-parameter": "^3.0.1",
     "koa-router": "^9.4.0",
     "koa-static": "^5.0.0",
-    "mongoose": "^5.10.3"
+    "mongoose": "^5.10.3",
+    "semver": "^7.3.2"
   }
 }
