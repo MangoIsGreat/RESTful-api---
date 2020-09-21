@@ -1,4 +1,5 @@
 const Topic = require("../models/topics");
+const Questions = require("../models/questions");
 
 class TopicsCtl {
   async find(ctx) {
@@ -10,9 +11,11 @@ class TopicsCtl {
       .skip(page * perPage);
   }
   async checkTopicExist(ctx, next) {
-    const topic = await Topic.findById(ctx.params.id)
-    if (!topic) { ctx.throw(404, "话题不存在") }
-    await next()
+    const topic = await Topic.findById(ctx.params.id);
+    if (!topic) {
+      ctx.throw(404, "话题不存在");
+    }
+    await next();
   }
   async findById(ctx) {
     const { fields = "" } = ctx.query;
@@ -46,8 +49,12 @@ class TopicsCtl {
     ctx.body = topic;
   }
   async listFollowers(ctx) {
-    const users = await user.find({ followingTopics: ctx.params.id })
-    ctx.body = users
+    const users = await user.find({ followingTopics: ctx.params.id });
+    ctx.body = users;
+  }
+  async listQuestions(ctx) {
+    const questions = await Question.find({ topics: ctx.params.id });
+    ctx.body = questions
   }
 }
 

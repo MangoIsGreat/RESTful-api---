@@ -1,5 +1,7 @@
 // 定义一个内存数据库：
 const User = require("../models/users");
+const Question = require("../models/questions");
+const Answer = require("../models/answers");
 const jwt = require("jsonwebtoken");
 const { secret } = require("../config");
 
@@ -107,7 +109,7 @@ class UsersCtl {
       await User.findById(ctx.params.id).select("+following")
     ).populate("following");
     if (!user) {
-      ctx.throw(404, '用户不存在');
+      ctx.throw(404, "用户不存在");
     }
     ctx.body = user.following;
   }
@@ -142,7 +144,9 @@ class UsersCtl {
     await next();
   }
   async followTopics(ctx) {
-    const me = await User.findById(ctx.state.user._id).select("+followingTopics");
+    const me = await User.findById(ctx.state.user._id).select(
+      "+followingTopics"
+    );
     if (!me.following.map((id) => id.toString()).includes(ctx.params.id)) {
       me.following.push(ctx.params.id);
       me.save();
@@ -150,7 +154,9 @@ class UsersCtl {
     ctx.status = 204;
   }
   async unfollowTopics(ctx) {
-    const me = await User.findById(ctx.state.user._id).select("+followingTopics");
+    const me = await User.findById(ctx.state.user._id).select(
+      "+followingTopics"
+    );
     const index = me.following
       .map((id) => id.toString())
       .indexOf(ctx.state.user._id);
@@ -165,9 +171,13 @@ class UsersCtl {
       await User.findById(ctx.params.id).select("+followingTopics")
     ).populate("followingTopics");
     if (!user) {
-      ctx.throw(404, '用户不存在');
+      ctx.throw(404, "用户不存在");
     }
     ctx.body = user.listFollowingTopics;
+  }
+  async listQuestions(ctx) {
+    const questions = await Question.find({ questioner: ctx.params.id });
+    ctx.body = questions;
   }
 }
 

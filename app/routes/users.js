@@ -16,6 +16,7 @@ const {
   followTopics,
   unfollowTopics,
   checkTopicExist,
+  listQuestions,
 } = require("../controllers/users");
 const router = new Router({ prefix: "/users" });
 const { secret } = require("../config");
@@ -56,5 +57,7 @@ router.put("/followingTopics/:id", auth, checkTopicExist, followTopics);
 
 // 取消关注话题：
 router.delete("/followingTopics/:id", auth, checkTopicExist, unfollowTopics);
+
+router.get("/:id/questions", listQuestions);
 
 module.exports = router;

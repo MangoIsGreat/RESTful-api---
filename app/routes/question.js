@@ -5,11 +5,11 @@ const {
   findById,
   update,
   create,
-  listFollowers,
-  checkTopicExist,
-  listQuestions
-} = require("../controllers/topics");
-const router = new Router({ prefix: "/topics" });
+  checkQuestionExist,
+  delete: del,
+  checkQuestioner,
+} = require("../controllers/questions");
+const router = new Router({ prefix: "/questions" });
 const { secret } = require("../config");
 
 const auth = jwt({ secret });
@@ -17,16 +17,14 @@ const auth = jwt({ secret });
 // 查（列表）数据：
 router.get("/", find);
 
-router.get("/:id", checkTopicExist, findById);
+router.get("/:id", checkQuestionExist, findById);
 
 // 增加数据：
 router.post("/", auth, create);
 
 // 修改数据,patch方法为修改部分信息，put方法为修改所有信息：
-router.patch("/:id", auth, checkTopicExist, update);
+router.patch("/:id", auth, checkQuestionExist, update);
 
-router.get("/:id/followers", checkTopicExist, listFollowers);
-
-router.get("/:id/questions", checkTopicExist, listQuestions);
+router.delete("/:id", checkQuestionExist, checkQuestioner, del);
 
 module.exports = router;
